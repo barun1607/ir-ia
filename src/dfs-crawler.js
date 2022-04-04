@@ -1,16 +1,17 @@
 const fetch = require("node-fetch");
-const { performance } = require("perf_hooks");
 const { getUrl } = require("./helper");
 const cheerio = require("cheerio");
 
 // const start = performance.now();
 
-let seenUrls = {};
+const seenUrls = {};
 
-const crawl = async (url) => {
-  if (seenUrls[url]) return;
+const crawl = async (url, depth) => {
+  if (seenUrls[url]) {
+    return;
+  }
+  console.log(url);
   seenUrls[url] = true;
-  // console.log(`Crawling: ${url}`);
   const parsedUrl = new URL(url);
   const host = parsedUrl.host;
   const protocol = parsedUrl.protocol;
@@ -27,12 +28,15 @@ const crawl = async (url) => {
       return link.attribs.href;
     })
     .get();
+  if (links.isEmpty) return;
   links
     .filter((link) => link.includes(host))
     .forEach((link) => {
       if (link.includes("http")) {
         try {
-          crawl(getUrl(link, host, protocol));
+          if (depth > 0) {
+            crawl(getUrl(link, host, protocol), depth - 1);
+          } else return;
         } catch (e) {
           console.log(`Error occured while crawling ${link}`);
         }
@@ -41,7 +45,10 @@ const crawl = async (url) => {
 };
 
 const dfsDrive = async () => {
-  return await crawl("http://stevescooking.blogspot.com/");
+  console.log("Crawling...");
+  await crawl("http://stevescooking.blogspot.com/", 3);
 };
 
-dfsDrive().then((res) => console.log(Object.keys(seenUrls)));
+const result = () => {
+  console.log(seenUrls);
+};
