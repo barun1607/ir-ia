@@ -1,8 +1,10 @@
 const fetch = require("node-fetch");
-const { getUrl } = require("./helper");
+const fs = require("fs");
+const { getUrl, getFileName } = require("./helper");
 const cheerio = require("cheerio");
 
-// const start = performance.now();
+const fileName = getFileName();
+const stream = fs.createWriteStream(`./data/${fileName}.txt`);
 
 const seenUrls = {};
 
@@ -10,7 +12,7 @@ const crawl = async (url, depth) => {
   if (seenUrls[url]) {
     return;
   }
-  console.log(url);
+  stream.write(`${url}\n`);
   seenUrls[url] = true;
   const parsedUrl = new URL(url);
   const host = parsedUrl.host;
@@ -49,6 +51,4 @@ const dfsDrive = async () => {
   await crawl("http://stevescooking.blogspot.com/", 3);
 };
 
-const result = () => {
-  console.log(seenUrls);
-};
+dfsDrive();
