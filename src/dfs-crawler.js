@@ -4,7 +4,7 @@ const { getUrl, getFileName } = require("./helper");
 const cheerio = require("cheerio");
 
 const fileName = getFileName();
-const stream = fs.createWriteStream(`./data/dfs/${fileName}.txt`);
+const stream = fs.createWriteStream(`./data/${fileName}.txt`);
 
 const seenUrls = {};
 
@@ -12,6 +12,7 @@ const crawl = async (url, depth) => {
   if (seenUrls[url]) {
     return;
   }
+  console.log(url);
   stream.write(`${url}\n`);
   seenUrls[url] = true;
   const parsedUrl = new URL(url);
@@ -57,11 +58,9 @@ Timestamp: ${new Date()}
 LINKS GATHERED: 
 `);
   await crawl(urlInp, depth);
+  console.log("Filename: ");
   return fileName;
 };
-
-// dfsDrive("http://stevescooking.blogspot.com/", 3);
-// dfsDrive("https://youtube.com", 2);
 
 module.exports = {
   dfsCrawler: drive,
