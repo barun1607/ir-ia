@@ -37,7 +37,7 @@ const crawl = async (url, depth) => {
     .forEach((link) => {
       if (link.includes("http")) {
         try {
-          if (depth > 0) {
+          if (depth > 1) {
             crawl(getUrl(link, host, protocol), depth - 1);
           } else return;
         } catch (e) {

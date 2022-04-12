@@ -36,6 +36,11 @@ const getLinks = async (url) => {
 };
 
 const crawl = async (url, depth) => {
+  if (depth === 1) {
+    console.log(url);
+    stream.write(`${url}\n`);
+    return;
+  }
   let queue = [];
   queue.push(url);
   for (let i = 0; i < depth; i++) {

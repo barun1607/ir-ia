@@ -3,18 +3,18 @@ const { bfsCrawler } = require("./bfs-crawler");
 
 let filename;
 
-dfsCrawler("http://stevescooking.blogspot.com/", 2)
-  .then((res) => {
-    filename = res;
-  })
-  .then(() => {
-    console.log(filename);
-  });
-
-// bfsCrawler("http://stevescooking.blogspot.com/", 2)
+// dfsCrawler("http://stevescooking.blogspot.com/", 2)
 //   .then((res) => {
 //     filename = res;
 //   })
 //   .then(() => {
 //     console.log(filename);
 //   });
+
+bfsCrawler("http://stevescooking.blogspot.com/", 1)
+  .then((res) => {
+    filename = res;
+  })
+  .then(() => {
+    console.log(filename);
+  });
